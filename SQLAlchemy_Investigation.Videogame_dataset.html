@@ -1,0 +1,1132 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+
+  <div class="border-box-sizing">
+    <div class="container">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Load Libraries</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">sqla</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[29]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Load DATA</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\Users\14372\Documents\Data1202_MySQL Datasets\vgsales-2016_wb.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;vgsales-2016&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[29]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Platform</th>
+      <th>Year_of_Release</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>NA_Sales</th>
+      <th>EU_Sales</th>
+      <th>JP_Sales</th>
+      <th>Other_Sales</th>
+      <th>Global_Sales</th>
+      <th>Critic_Score</th>
+      <th>Critic_Count</th>
+      <th>User_Score</th>
+      <th>User_Count</th>
+      <th>Developer</th>
+      <th>Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Wii Sports</td>
+      <td>Wii</td>
+      <td>2006.0</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>41.36</td>
+      <td>28.96</td>
+      <td>3.77</td>
+      <td>8.45</td>
+      <td>82.53</td>
+      <td>76.0</td>
+      <td>51.0</td>
+      <td>8</td>
+      <td>322.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Super Mario Bros.</td>
+      <td>NES</td>
+      <td>1985.0</td>
+      <td>Platform</td>
+      <td>Nintendo</td>
+      <td>29.08</td>
+      <td>3.58</td>
+      <td>6.81</td>
+      <td>0.77</td>
+      <td>40.24</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Mario Kart Wii</td>
+      <td>Wii</td>
+      <td>2008.0</td>
+      <td>Racing</td>
+      <td>Nintendo</td>
+      <td>15.68</td>
+      <td>12.76</td>
+      <td>3.79</td>
+      <td>3.29</td>
+      <td>35.52</td>
+      <td>82.0</td>
+      <td>73.0</td>
+      <td>8.3</td>
+      <td>709.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Wii Sports Resort</td>
+      <td>Wii</td>
+      <td>2009.0</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>15.61</td>
+      <td>10.93</td>
+      <td>3.28</td>
+      <td>2.95</td>
+      <td>32.77</td>
+      <td>80.0</td>
+      <td>73.0</td>
+      <td>8</td>
+      <td>192.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Pokemon Red/Pokemon Blue</td>
+      <td>GB</td>
+      <td>1996.0</td>
+      <td>Role-Playing</td>
+      <td>Nintendo</td>
+      <td>11.27</td>
+      <td>8.89</td>
+      <td>10.22</td>
+      <td>1.00</td>
+      <td>31.37</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[61]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#mean of sales with nulls still in</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Global_Sales&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[61]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.5335426759974459</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># dropping null value columns to avoid errors </span>
+<span class="n">df1</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#mean of all sales with nulls removed </span>
+<span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Global_Sales&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[39]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.777589743589759</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Display without nulls</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[41]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Platform</th>
+      <th>Year_of_Release</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>NA_Sales</th>
+      <th>EU_Sales</th>
+      <th>JP_Sales</th>
+      <th>Other_Sales</th>
+      <th>Global_Sales</th>
+      <th>Critic_Score</th>
+      <th>Critic_Count</th>
+      <th>User_Score</th>
+      <th>User_Count</th>
+      <th>Developer</th>
+      <th>Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Wii Sports</td>
+      <td>Wii</td>
+      <td>2006.0</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>41.36</td>
+      <td>28.96</td>
+      <td>3.77</td>
+      <td>8.45</td>
+      <td>82.53</td>
+      <td>76.0</td>
+      <td>51.0</td>
+      <td>8</td>
+      <td>322.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Mario Kart Wii</td>
+      <td>Wii</td>
+      <td>2008.0</td>
+      <td>Racing</td>
+      <td>Nintendo</td>
+      <td>15.68</td>
+      <td>12.76</td>
+      <td>3.79</td>
+      <td>3.29</td>
+      <td>35.52</td>
+      <td>82.0</td>
+      <td>73.0</td>
+      <td>8.3</td>
+      <td>709.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Wii Sports Resort</td>
+      <td>Wii</td>
+      <td>2009.0</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>15.61</td>
+      <td>10.93</td>
+      <td>3.28</td>
+      <td>2.95</td>
+      <td>32.77</td>
+      <td>80.0</td>
+      <td>73.0</td>
+      <td>8</td>
+      <td>192.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>New Super Mario Bros.</td>
+      <td>DS</td>
+      <td>2006.0</td>
+      <td>Platform</td>
+      <td>Nintendo</td>
+      <td>11.28</td>
+      <td>9.14</td>
+      <td>6.50</td>
+      <td>2.88</td>
+      <td>29.80</td>
+      <td>89.0</td>
+      <td>65.0</td>
+      <td>8.5</td>
+      <td>431.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Wii Play</td>
+      <td>Wii</td>
+      <td>2006.0</td>
+      <td>Misc</td>
+      <td>Nintendo</td>
+      <td>13.96</td>
+      <td>9.18</td>
+      <td>2.93</td>
+      <td>2.84</td>
+      <td>28.92</td>
+      <td>58.0</td>
+      <td>41.0</td>
+      <td>6.6</td>
+      <td>129.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[93]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">dtypes</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[93]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Name                object
+Platform            object
+Year_of_Release      int32
+Genre               object
+Publisher           object
+NA_Sales           float64
+EU_Sales           float64
+JP_Sales           float64
+Other_Sales        float64
+Global_Sales       float64
+Critic_Score       float64
+Critic_Count       float64
+User_Score          object
+User_Count         float64
+Developer           object
+Rating              object
+dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[92]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Year_of_Release&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[92]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0        2006
+2        2008
+3        2009
+6        2006
+7        2006
+         ... 
+16667    2001
+16677    2002
+16696    2014
+16700    2011
+16706    2011
+Name: Year_of_Release, Length: 6825, dtype: int64</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[&#160;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[87]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Pre 2005 Average</span>
+<span class="n">Pre_2005</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[(</span><span class="n">df1</span><span class="p">[</span><span class="s2">&quot;Year_of_Release&quot;</span><span class="p">]</span><span class="o">&lt;</span> <span class="mi">2005</span><span class="p">)]</span> 
+<span class="nb">print</span><span class="p">(</span><span class="n">Pre_2005</span><span class="p">)</span>
+<span class="n">Pre_2005</span><span class="p">[</span><span class="s1">&#39;Global_Sales&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>                                 Name Platform  Year_of_Release     Genre  \
+17      Grand Theft Auto: San Andreas      PS2             2004    Action   
+24        Grand Theft Auto: Vice City      PS2             2002    Action   
+28             Gran Turismo 3: A-Spec      PS2             2001    Racing   
+38               Grand Theft Auto III      PS2             2001    Action   
+48                     Gran Turismo 4      PS2             2004    Racing   
+...                               ...      ...              ...       ...   
+16569    Egg Mania: Eggstreme Madness       GC             2002    Puzzle   
+16618        Legacy of Kain: Defiance       PC             2003    Action   
+16631                   Karnaaj Rally      GBA             2003    Racing   
+16667      E.T. The Extra-Terrestrial      GBA             2001    Action   
+16677  Mortal Kombat: Deadly Alliance      GBA             2002  Fighting   
+
+                         Publisher  NA_Sales  EU_Sales  JP_Sales  Other_Sales  \
+17            Take-Two Interactive      9.43      0.40      0.41        10.57   
+24            Take-Two Interactive      8.41      5.49      0.47         1.78   
+28     Sony Computer Entertainment      6.85      5.09      1.87         1.16   
+38            Take-Two Interactive      6.99      4.51      0.30         1.30   
+48     Sony Computer Entertainment      3.01      0.01      1.10         7.53   
+...                            ...       ...       ...       ...          ...   
+16569                        Kemco      0.01      0.00      0.00         0.00   
+16618            Eidos Interactive      0.00      0.01      0.00         0.00   
+16631                       Jaleco      0.01      0.00      0.00         0.00   
+16667                     NewKidCo      0.01      0.00      0.00         0.00   
+16677                 Midway Games      0.01      0.00      0.00         0.00   
+
+       Global_Sales  Critic_Score  Critic_Count User_Score  User_Count  \
+17            20.81          95.0          80.0          9      1588.0   
+24            16.15          95.0          62.0        8.7       730.0   
+28            14.98          95.0          54.0        8.4       314.0   
+38            13.10          97.0          56.0        8.5       664.0   
+48            11.66          89.0          74.0        8.5       272.0   
+...             ...           ...           ...        ...         ...   
+16569          0.01          64.0           7.0          8         4.0   
+16618          0.01          70.0          11.0        8.7        67.0   
+16631          0.01          81.0           9.0        9.5         4.0   
+16667          0.01          46.0           4.0        2.4        21.0   
+16677          0.01          81.0          12.0        8.8         9.0   
+
+                        Developer Rating  
+17                 Rockstar North      M  
+24                 Rockstar North      M  
+28              Polyphony Digital      E  
+38                     DMA Design      M  
+48              Polyphony Digital      E  
+...                           ...    ...  
+16569                       Kemco      E  
+16618             Nixxes Software      M  
+16631  Infinite Dreams, Paragon 5      E  
+16667               Fluid Studios      E  
+16677             Criterion Games      M  
+
+[1866 rows x 16 columns]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[87]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.7244962486602303</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[88]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Post 2005 Average</span>
+<span class="n">Post_2005</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[(</span><span class="n">df1</span><span class="p">[</span><span class="s2">&quot;Year_of_Release&quot;</span><span class="p">]</span><span class="o">&gt;</span> <span class="mi">2005</span><span class="p">)]</span> 
+<span class="nb">print</span><span class="p">(</span><span class="n">Post_2005</span><span class="p">)</span>
+<span class="n">Post_2005</span><span class="p">[</span><span class="s1">&#39;Global_Sales&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>                                    Name Platform  Year_of_Release     Genre  \
+0                             Wii Sports      Wii             2006    Sports   
+2                         Mario Kart Wii      Wii             2008    Racing   
+3                      Wii Sports Resort      Wii             2009    Sports   
+6                  New Super Mario Bros.       DS             2006  Platform   
+7                               Wii Play      Wii             2006      Misc   
+...                                  ...      ...              ...       ...   
+16644                    Hospital Tycoon       PC             2007  Strategy   
+16656                   Fast Racing Neo      WiiU             2016    Action   
+16696  Metal Gear Solid V: Ground Zeroes       PC             2014    Action   
+16700                             Breach       PC             2011   Shooter   
+16706            STORM: Frontline Nation       PC             2011  Strategy   
+
+                          Publisher  NA_Sales  EU_Sales  JP_Sales  \
+0                          Nintendo     41.36     28.96      3.77   
+2                          Nintendo     15.68     12.76      3.79   
+3                          Nintendo     15.61     10.93      3.28   
+6                          Nintendo     11.28      9.14      6.50   
+7                          Nintendo     13.96      9.18      2.93   
+...                             ...       ...       ...       ...   
+16644                   Codemasters      0.00      0.01      0.00   
+16656                      Nintendo      0.00      0.01      0.00   
+16696  Konami Digital Entertainment      0.00      0.01      0.00   
+16700                     Destineer      0.01      0.00      0.00   
+16706                       Unknown      0.00      0.01      0.00   
+
+       Other_Sales  Global_Sales  Critic_Score  Critic_Count User_Score  \
+0             8.45         82.53          76.0          51.0          8   
+2             3.29         35.52          82.0          73.0        8.3   
+3             2.95         32.77          80.0          73.0          8   
+6             2.88         29.80          89.0          65.0        8.5   
+7             2.84         28.92          58.0          41.0        6.6   
+...            ...           ...           ...           ...        ...   
+16644         0.00          0.01          51.0           8.0        3.8   
+16656         0.00          0.01          81.0          46.0        8.5   
+16696         0.00          0.01          80.0          20.0        7.6   
+16700         0.00          0.01          61.0          12.0        5.8   
+16706         0.00          0.01          60.0          12.0        7.2   
+
+       User_Count           Developer Rating  
+0           322.0            Nintendo      E  
+2           709.0            Nintendo      E  
+3           192.0            Nintendo      E  
+6           431.0            Nintendo      E  
+7           129.0            Nintendo      E  
+...           ...                 ...    ...  
+16644        29.0    Big Red Software   E10+  
+16656       151.0             Shin&#39;en      E  
+16696       412.0  Kojima Productions      M  
+16700        43.0        Atomic Games      T  
+16706        13.0              SimBin   E10+  
+
+[4397 rows x 16 columns]
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[88]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.8234750966568192</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[103]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Creating new column 1 (this does not work)</span>
+ 
+<span class="n">df1</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df1</span><span class="p">[</span><span class="s2">&quot;Year_of_Release&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2005</span><span class="p">),</span> <span class="s2">&quot;Pre/Post 2005&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Post-2005&quot;</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df1</span><span class="p">[</span><span class="s2">&quot;Year_of_Release&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2005</span><span class="p">),</span> <span class="s2">&quot;Pre/Post 2005&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pre-2005&quot;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>C:\Users\14372\anaconda3\lib\site-packages\pandas\core\indexing.py:966: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  self.obj[item] = s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[99]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Work around</span>
+<span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Pre/Post_2005&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">Year_of_Release</span> <span class="o">&gt;</span><span class="mi">2005</span><span class="p">,</span> <span class="s2">&quot;Post2005&quot;</span><span class="p">,</span> <span class="s2">&quot;Pre2005&quot;</span><span class="p">)</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>&lt;ipython-input-99-607773ce1a1b&gt;:1: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df1[&#39;Pre/Post_2005&#39;] = np.where(df1.Year_of_Release &gt;2005, &quot;Post2005&quot;, &quot;Pre2005&quot;)
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[99]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Platform</th>
+      <th>Year_of_Release</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>NA_Sales</th>
+      <th>EU_Sales</th>
+      <th>JP_Sales</th>
+      <th>Other_Sales</th>
+      <th>Global_Sales</th>
+      <th>Critic_Score</th>
+      <th>Critic_Count</th>
+      <th>User_Score</th>
+      <th>User_Count</th>
+      <th>Developer</th>
+      <th>Rating</th>
+      <th>Pre/Post_2005</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Wii Sports</td>
+      <td>Wii</td>
+      <td>2006</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>41.36</td>
+      <td>28.96</td>
+      <td>3.77</td>
+      <td>8.45</td>
+      <td>82.53</td>
+      <td>76.0</td>
+      <td>51.0</td>
+      <td>8</td>
+      <td>322.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Mario Kart Wii</td>
+      <td>Wii</td>
+      <td>2008</td>
+      <td>Racing</td>
+      <td>Nintendo</td>
+      <td>15.68</td>
+      <td>12.76</td>
+      <td>3.79</td>
+      <td>3.29</td>
+      <td>35.52</td>
+      <td>82.0</td>
+      <td>73.0</td>
+      <td>8.3</td>
+      <td>709.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Wii Sports Resort</td>
+      <td>Wii</td>
+      <td>2009</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>15.61</td>
+      <td>10.93</td>
+      <td>3.28</td>
+      <td>2.95</td>
+      <td>32.77</td>
+      <td>80.0</td>
+      <td>73.0</td>
+      <td>8</td>
+      <td>192.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[102]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">#way 3 to makem it work</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df1</span><span class="p">[</span><span class="s2">&quot;Year_of_Release&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2005</span><span class="p">),</span> <span class="s2">&quot;Pre_or_Post_2005&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Post_2005&quot;</span>
+<span class="n">df1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[102]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Platform</th>
+      <th>Year_of_Release</th>
+      <th>Genre</th>
+      <th>Publisher</th>
+      <th>NA_Sales</th>
+      <th>EU_Sales</th>
+      <th>JP_Sales</th>
+      <th>Other_Sales</th>
+      <th>Global_Sales</th>
+      <th>Critic_Score</th>
+      <th>Critic_Count</th>
+      <th>User_Score</th>
+      <th>User_Count</th>
+      <th>Developer</th>
+      <th>Rating</th>
+      <th>Pre/Post_2005</th>
+      <th>Pre/Post 2005</th>
+      <th>Pre_or_Post_2005</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Wii Sports</td>
+      <td>Wii</td>
+      <td>2006</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>41.36</td>
+      <td>28.96</td>
+      <td>3.77</td>
+      <td>8.45</td>
+      <td>82.53</td>
+      <td>76.0</td>
+      <td>51.0</td>
+      <td>8</td>
+      <td>322.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+      <td>Post-2005</td>
+      <td>Post_2005</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Mario Kart Wii</td>
+      <td>Wii</td>
+      <td>2008</td>
+      <td>Racing</td>
+      <td>Nintendo</td>
+      <td>15.68</td>
+      <td>12.76</td>
+      <td>3.79</td>
+      <td>3.29</td>
+      <td>35.52</td>
+      <td>82.0</td>
+      <td>73.0</td>
+      <td>8.3</td>
+      <td>709.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+      <td>Post-2005</td>
+      <td>Post_2005</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Wii Sports Resort</td>
+      <td>Wii</td>
+      <td>2009</td>
+      <td>Sports</td>
+      <td>Nintendo</td>
+      <td>15.61</td>
+      <td>10.93</td>
+      <td>3.28</td>
+      <td>2.95</td>
+      <td>32.77</td>
+      <td>80.0</td>
+      <td>73.0</td>
+      <td>8</td>
+      <td>192.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+      <td>Post-2005</td>
+      <td>Post_2005</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>New Super Mario Bros.</td>
+      <td>DS</td>
+      <td>2006</td>
+      <td>Platform</td>
+      <td>Nintendo</td>
+      <td>11.28</td>
+      <td>9.14</td>
+      <td>6.50</td>
+      <td>2.88</td>
+      <td>29.80</td>
+      <td>89.0</td>
+      <td>65.0</td>
+      <td>8.5</td>
+      <td>431.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+      <td>Post-2005</td>
+      <td>Post_2005</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Wii Play</td>
+      <td>Wii</td>
+      <td>2006</td>
+      <td>Misc</td>
+      <td>Nintendo</td>
+      <td>13.96</td>
+      <td>9.18</td>
+      <td>2.93</td>
+      <td>2.84</td>
+      <td>28.92</td>
+      <td>58.0</td>
+      <td>41.0</td>
+      <td>6.6</td>
+      <td>129.0</td>
+      <td>Nintendo</td>
+      <td>E</td>
+      <td>Post2005</td>
+      <td>Post-2005</td>
+      <td>Post_2005</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&#160;[&#160;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    </div>
+  </div>
+
+
+ 
+
+
+
+<script type="module" src="https://s.brightspace.com/lib/bsi/20.22.12-222/unbundled/mathjax.js"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() {
+					if (document.querySelector('math') || /\$\$|\\\(|\\\[|\\begin{|\\ref{|\\eqref{/.test(document.body.innerHTML)) {
+						document.querySelectorAll('mspace[linebreak="newline"]').forEach(elm => {
+							elm.setAttribute('style', 'display: block; height: 0.5rem;');
+						});
+
+						window.D2L.MathJax.loadMathJax({
+							'outputScale': 1.3,
+							'renderLatex': false
+						});
+					}
+				});</script><script type="module" src="https://s.brightspace.com/lib/bsi/20.22.12-222/unbundled/prism.js"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() {
+					document.querySelectorAll('.d2l-code').forEach(code => {
+						window.D2L.Prism.formatCodeElement(code);
+					});
+				});</script></body></html>
